@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conferência de Relatórios — Impostos</title>
+    <meta name="description" content="Sistema de conferência automática de relatórios de impostos: INSS, IRRF, FGTS e Resumo de Débitos.">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
+</head>
+<body>
+    <div class="background-elements">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="blob blob-3"></div>
+    </div>
+
+    <div class="container">
+        <header>
+            <div class="header-badge">
+                <span class="dot"></span>
+                Sistema de Conferência de impostos
+            </div>
+            <h1>Imposto Confere</h1>
+            <p>Faça o upload dos relatórios e compare os valores automaticamente — INSS, IRRF e FGTS.</p>
+        </header>
+
+        <main>
+            <div class="section-label">Relatórios de Referência</div>
+            <div class="upload-section">
+                <!-- Dropzone para Relatório Base INSS -->
+                <div class="dropzone" id="dropzone-base">
+                    <div class="icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="12" y1="18" x2="12" y2="12"></line><line x1="9" y1="15" x2="15" y2="15"></line></svg>
+                    </div>
+                    <h3>Base INSS</h3>
+                    <p>Arraste o PDF aqui</p>
+                    <input type="file" id="file-base" accept="application/pdf" hidden>
+                    <span class="file-name" id="filename-base"></span>
+                </div>
+
+                <!-- Dropzone para Relatório Base IRRF -->
+                <div class="dropzone" id="dropzone-irrf">
+                    <div class="icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><circle cx="12" cy="14" r="3"></circle></svg>
+                    </div>
+                    <h3>Base IRRF</h3>
+                    <p>Arraste o PDF aqui</p>
+                    <input type="file" id="file-irrf" accept="application/pdf" hidden>
+                    <span class="file-name" id="filename-irrf"></span>
+                </div>
+
+                <!-- Dropzone para Resumo de Débitos -->
+                <div class="dropzone" id="dropzone-resumo">
+                    <div class="icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                    </div>
+                    <h3>Resumo de Débitos</h3>
+                    <p>Arraste o PDF aqui</p>
+                    <input type="file" id="file-resumo" accept="application/pdf" hidden>
+                    <span class="file-name" id="filename-resumo"></span>
+                </div>
+
+                <!-- Dropzone para Relatório Base FGTS -->
+                <div class="dropzone" id="dropzone-fgts-pdf">
+                    <div class="icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="9" y1="21" x2="9" y2="9"></line></svg>
+                    </div>
+                    <h3>Base FGTS</h3>
+                    <p>Arraste o PDF aqui</p>
+                    <input type="file" id="file-fgts-pdf" accept="application/pdf" hidden>
+                    <span class="file-name" id="filename-fgts-pdf"></span>
+                </div>
+
+                <!-- Dropzone para FGTS Digital (CSV) -->
+                <div class="dropzone" id="dropzone-fgts-csv">
+                    <div class="icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 16 12 14 15 10 15 8 12 2 12"></polyline><path d="M5.45 5.11L2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"></path></svg>
+                    </div>
+                    <h3>FGTS Digital (CSV)</h3>
+                    <p>Arraste o arquivo CSV aqui</p>
+                    <input type="file" id="file-fgts-csv" accept=".csv" hidden>
+                    <span class="file-name" id="filename-fgts-csv"></span>
+                </div>
+            </div>
+
+            <div class="actions">
+                <button id="btn-compare" class="btn-primary" disabled>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-right:0.5rem;vertical-align:middle;"><polyline points="22 4 12 14.01 9 11.01"></polyline><path d="M22 4L12 14.01l-3-3L2 18"></path></svg>
+                    Comparar Relatórios
+                </button>
+                <div class="loader" id="loader"></div>
+            </div>
+
+            <div id="results-section" class="results-section hidden">
+                <div class="results-header">
+                    <h2>Resultado da Conferência</h2>
+                    <div class="line"></div>
+                </div>
+
+                <div class="section-label" style="margin-bottom:1rem;">INSS — Contribuições</div>
+                <div class="cards">
+                    <!-- CP SEGURADOS 1082-01 -->
+                    <div class="result-card">
+                        <h3>Segurados Colaboradores</h3>
+                        <div class="comparison">
+                            <div class="value-box">
+                                <span class="label">Base INSS</span>
+                                <span class="value" id="val-base-colab">R$ 0,00</span>
+                            </div>
+                            <div class="value-box">
+                                <span class="label">Resumo Débitos</span>
+                                <span class="value" id="val-res-colab">R$ 0,00</span>
+                            </div>
+                        </div>
+                        <div class="status" id="status-colab"></div>
+                    </div>
+
+                    <!-- CP SEGURADOS 1099-01 -->
+                    <div class="result-card">
+                        <h3>Segurados Empregadores</h3>
+                        <div class="comparison">
+                            <div class="value-box">
+                                <span class="label">Base INSS</span>
+                                <span class="value" id="val-base-emp">R$ 0,00</span>
+                            </div>
+                            <div class="value-box">
+                                <span class="label">Resumo Débitos</span>
+                                <span class="value" id="val-res-emp">R$ 0,00</span>
+                            </div>
+                        </div>
+                        <div class="status" id="status-emp"></div>
+                    </div>
+
+                    <!-- CP PATRONAL 1138-01 -->
+                    <div class="result-card">
+                        <h3>Patronal Colaboradores</h3>
+                        <div class="comparison">
+                            <div class="value-box">
+                                <span class="label">Base INSS</span>
+                                <span class="value" id="val-base-pat-colab">R$ 0,00</span>
+                            </div>
+                            <div class="value-box">
+                                <span class="label">Resumo Débitos</span>
+                                <span class="value" id="val-res-pat-colab">R$ 0,00</span>
+                            </div>
+                        </div>
+                        <div class="status" id="status-pat-colab"></div>
+                    </div>
+
+                    <!-- CP PATRONAL 1138-04 -->
+                    <div class="result-card">
+                        <h3>Patronal Empregadores</h3>
+                        <div class="comparison">
+                            <div class="value-box">
+                                <span class="label">Base INSS</span>
+                                <span class="value" id="val-base-pat-emp">R$ 0,00</span>
+                            </div>
+                            <div class="value-box">
+                                <span class="label">Resumo Débitos</span>
+                                <span class="value" id="val-res-pat-emp">R$ 0,00</span>
+                            </div>
+                        </div>
+                        <div class="status" id="status-pat-emp"></div>
+                    </div>
+
+                    <!-- GILRAT 1646-01 -->
+                    <div class="result-card">
+                        <h3>GILRAT</h3>
+                        <div class="comparison">
+                            <div class="value-box">
+                                <span class="label">Base INSS</span>
+                                <span class="value" id="val-base-rat">R$ 0,00</span>
+                            </div>
+                            <div class="value-box">
+                                <span class="label">Resumo Débitos</span>
+                                <span class="value" id="val-res-rat">R$ 0,00</span>
+                            </div>
+                        </div>
+                        <div class="status" id="status-rat"></div>
+                    </div>
+
+                    <!-- TERCEIROS -->
+                    <div class="result-card">
+                        <h3>Terceiros</h3>
+                        <div class="comparison">
+                            <div class="value-box">
+                                <span class="label">Base INSS</span>
+                                <span class="value" id="val-base-terc">R$ 0,00</span>
+                            </div>
+                            <div class="value-box">
+                                <span class="label">Resumo Débitos</span>
+                                <span class="value" id="val-res-terc">R$ 0,00</span>
+                            </div>
+                        </div>
+                        <div class="status" id="status-terc"></div>
+                    </div>
+
+                    <!-- IRRF 0561-07 -->
+                    <div class="result-card">
+                        <h3>IRRF</h3>
+                        <div class="comparison">
+                            <div class="value-box">
+                                <span class="label">Base IRRF</span>
+                                <span class="value" id="val-base-irrf">R$ 0,00</span>
+                            </div>
+                            <div class="value-box">
+                                <span class="label">Resumo Débitos</span>
+                                <span class="value" id="val-res-irrf">R$ 0,00</span>
+                            </div>
+                        </div>
+                        <div class="status" id="status-irrf"></div>
+                    </div>
+
+                    <!-- FGTS Comparação -->
+                    <div class="result-card" style="grid-column: 1 / -1;">
+                        <h3>FGTS</h3>
+                        <div class="comparison">
+                            <div class="value-box">
+                                <span class="label">Base FGTS (PDF)</span>
+                                <span class="value" id="val-base-fgts">R$ 0,00</span>
+                            </div>
+                            <div class="value-box">
+                                <span class="label">FGTS Digital (CSV)</span>
+                                <span class="value" id="val-csv-fgts">R$ 0,00</span>
+                            </div>
+                        </div>
+                        <div class="status" id="status-fgts"></div>
+                        <div id="fgts-divergencias" style="display:none;">
+                            <h4>Colaboradores com Divergência</h4>
+                            <ul id="fgts-divergencias-list"></ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
